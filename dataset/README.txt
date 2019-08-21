@@ -1,28 +1,13 @@
 Datasets
 ========
-The main directory contains the directories of two Twitter datasets: twitter15 and twitter16. In each directory, there are:
-- 'tree' sub-directory: This folder contains all the tree files, each of which corresponds to the tree structure given a source tweet whose file name is indicated by the source tweet ID. In the tree file, each line represents an edge given in the following format:
-  ** parent node -> child node
-  ** Each node is given as a tuple: ['uid', 'tweet ID', 'post time delay (in minutes)']
+The main directory contains the directories of Weibo dataset and two Twitter datasets: twitter15 and twitter16. In each directory, there are:
+- twitter15.train, twitter15.dev, and twitter15.test file: This files provide traing, development and test samples in a format like:
+  ** 'source tweet ID \t source tweet content \t label'
   
-- label.txt file: This file provides the ground-truth labels of the trees in a format like:
-  ** 'label:source tweet ID'
-  
-- source_tweets.txt file: This file provides the source posts content of the trees in a format like:
-  ** 'source tweet ID \t source tweet content'  
+- twitter15_graph.txt file: This file provides the source posts content of the trees in a format like:
+  ** 'source tweet ID \t userID1:weight1 userID2:weight2 ...'  
+These dastasets are preprecessed according to our requirement and original datasets can be available at https://www.dropbox.com/s/7ewzdrbelpmrnxu/rumdetect2017.zip?dl=0  (Twitter)  and 
 
-Note that constrained by the terms of Twitter service, we cannot contain the content of the rest of the tweets. Data users can obtain the sepcifics based on the provided tweet IDs and uids by their own.
-
-Feature description
-===================
-- Content features: uni-grams, bi-grams (presence/absence, binary)
-- User features:
-  ** # of followers
-  ** # of friends
-  ** ratio of followers and friends
-  ** # of history tweets
-  ** registration time (year)
-  ** whether a verify account or not
 
 References
 ==========
