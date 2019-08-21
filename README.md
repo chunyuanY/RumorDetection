@@ -10,5 +10,15 @@ Scikit-learn==0.21.2
 
 Pytorch==1.1.0
 
+# Datasets
+========
+The main directory contains the directories of Weibo dataset and two Twitter datasets: twitter15 and twitter16. In each directory, there are:
+- twitter15.train, twitter15.dev, and twitter15.test file: This files provide traing, development and test samples in a format like:
+  ** 'source tweet ID \t source tweet content \t label'
+  
+- twitter15_graph.txt file: This file provides the source posts content of the trees in a format like:
+  ** 'source tweet ID \t userID1:weight1 userID2:weight2 ...'  
+These dastasets are preprecessed according to our requirement and original datasets can be available at https://www.dropbox.com/s/7ewzdrbelpmrnxu/rumdetect2017.zip?dl=0  (Twitter)  and 
+
 # Reproduce the experimental results:
 Download this project and run script run.py 
