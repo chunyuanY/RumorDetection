@@ -16,7 +16,7 @@ The main directory contains the directories of Weibo dataset and two Twitter dat
   
 - twitter15_graph.txt file: This file provides the source posts content of the trees in a format like: 'source tweet ID \t userID1:weight1 userID2:weight2 ...'  
 
-These dastasets are preprecessed according to our requirement and original datasets can be available at https://www.dropbox.com/s/7ewzdrbelpmrnxu/rumdetect2017.zip?dl=0  (Twitter)  and http://alt.qcri.org/~wgao/data/rumdect.zip (Twitter).
+These dastasets are preprecessed according to our requirement and original datasets can be available at https://www.dropbox.com/s/7ewzdrbelpmrnxu/rumdetect2017.zip?dl=0  (Twitter)  and http://alt.qcri.org/~wgao/data/rumdect.zip (Weibo).
 
 # Reproduce the experimental results:
 Download this project and run script run.py 
