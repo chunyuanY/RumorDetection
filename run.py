@@ -6,10 +6,10 @@ from model.GLAN import GLAN
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
-def load_dataset(tbName):
-    X_train_tid, X_train, y_train, word_embeddings, adj = pickle.load(open("dataset/"+tbName+"/train.pkl", 'rb'))
-    X_dev_tid, X_dev, y_dev = pickle.load(open("dataset/"+tbName+"/dev.pkl", 'rb'))
-    X_test_tid, X_test, y_test = pickle.load(open("dataset/"+tbName+"/test.pkl", 'rb'))
+def load_dataset(task):
+    X_train_tid, X_train, y_train, word_embeddings, adj = pickle.load(open("dataset/"+task+"/train.pkl", 'rb'))
+    X_dev_tid, X_dev, y_dev = pickle.load(open("dataset/"+task+"/dev.pkl", 'rb'))
+    X_test_tid, X_test, y_test = pickle.load(open("dataset/"+task+"/test.pkl", 'rb'))
     config['embedding_weights'] = word_embeddings
     print("#nodes: ", adj.shape[0])
     return X_train_tid, X_train, y_train, \
@@ -17,13 +17,13 @@ def load_dataset(tbName):
            X_test_tid, X_test, y_test, adj
 
 
-def train_and_test(model, tbName):
+def train_and_test(model, task):
     model_suffix = model.__name__.lower().strip("text")
-    config['save_path'] = 'checkpoint/weights.best.' + tbName + "." + model_suffix
+    config['save_path'] = 'checkpoint/weights.best.' + task + "." + model_suffix
 
     X_train_tid, X_train, y_train, \
     X_dev_tid, X_dev, y_dev, \
-    X_test_tid, X_test, y_test, adj = load_dataset(tbName)
+    X_test_tid, X_test, y_test, adj = load_dataset(task)
 
     nn = model(config, adj)
     nn.fit(X_train_tid, X_train, y_train,
