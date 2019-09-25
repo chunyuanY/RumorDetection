@@ -19,4 +19,5 @@ The main directory contains the directories of Weibo dataset and two Twitter dat
 These dastasets are preprecessed according to our requirement and original datasets can be available at https://www.dropbox.com/s/7ewzdrbelpmrnxu/rumdetect2017.zip?dl=0  (Twitter)  and http://alt.qcri.org/~wgao/data/rumdect.zip (Weibo).
 
 # Reproduce the experimental results:
-Download this project and run script run.py 
+1. create an empty directory: checkpoint/
+2. run script run.py 
