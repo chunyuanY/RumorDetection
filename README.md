@@ -27,7 +27,7 @@ If you want to preprocess the dataset by youself, you can use the word2vec used 
 
 
 ## Citation
-If you use any part of this code in your research, please cite our paper:
+If you find this code useful in your research, please cite our paper:
 ```
 @inproceedings{rumor_yuan_2019,
   title={Jointly embedding the local and global relations of heterogeneous graph for rumor detection},
