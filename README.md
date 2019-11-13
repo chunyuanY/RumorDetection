@@ -24,3 +24,17 @@ If you want to preprocess the dataset by youself, you can use the word2vec used 
 # Reproduce the experimental results:
 1. create an empty directory: checkpoint/
 2. run script run.py 
+
+
+## Citation
+If you use any part of this code in your research, please cite our paper:
+```
+@inproceedings{rumor_yuan_2019,
+  title={Jointly embedding the local and global relations of heterogeneous graph for rumor detection},
+  author={Yuan, Chunyuan and Ma, Qianwen and Zhou, Wei and Han, Jizhong and Hu, Songlin},
+  booktitle={The 19th IEEE International Conference on Data Mining},
+  year={2019},
+  organization={IEEE}
+}
+```
+
