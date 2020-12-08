@@ -1,0 +1,1563 @@
+E:\Programming\Miniconda3\python.exe D:/Project/RumorDetection/run.py
+task:  twitter16
+#nodes:  3550
+WARNING:root:The number of nodes in your data object can only be inferred by its edge indices, and hence may result in unexpected batch-wise behavior, e.g., in case there exists isolated nodes. Please consider explicitly setting the number of nodes for this data object by assigning it to data.num_nodes.
+WARNING:root:The number of nodes in your data object can only be inferred by its edge indices, and hence may result in unexpected batch-wise behavior, e.g., in case there exists isolated nodes. Please consider explicitly setting the number of nodes for this data object by assigning it to data.num_nodes.
+GLAN(
+  (loss_func): CrossEntropyLoss()
+  (word_embedding): Embedding(7183, 300, padding_idx=0)
+  (user_tweet_embedding): Embedding(3550, 300, padding_idx=0)
+  (mh_attention): MultiheadAttention(
+    (linear1): Linear(in_features=300, out_features=300, bias=True)
+    (linear2): Linear(in_features=300, out_features=300, bias=True)
+    (linear3): Linear(in_features=300, out_features=300, bias=True)
+    (dropout): Dropout(p=0.0, inplace=False)
+  )
+  (linear_fuse): Linear(in_features=600, out_features=1, bias=True)
+  (gnn1): GATConv(300, 8, heads=8)
+  (gnn2): GATConv(64, 300, heads=1)
+  (attention): Attention(
+    (linear1): Linear(in_features=600, out_features=300, bias=True)
+    (linear2): Linear(in_features=300, out_features=1, bias=True)
+    (activation): ReLU()
+    (dropout): Dropout(p=0.5, inplace=False)
+  )
+  (convs_source): ModuleList(
+    (0): Conv1d(300, 100, kernel_size=(3,), stride=(1,))
+    (1): Conv1d(300, 100, kernel_size=(4,), stride=(1,))
+    (2): Conv1d(300, 100, kernel_size=(5,), stride=(1,))
+  )
+  (convs_replies): ModuleList(
+    (0): Conv1d(300, 100, kernel_size=(3,), stride=(1,))
+    (1): Conv1d(300, 100, kernel_size=(4,), stride=(1,))
+    (2): Conv1d(300, 100, kernel_size=(5,), stride=(1,))
+  )
+  (max_poolings): ModuleList(
+    (0): MaxPool1d(kernel_size=48, stride=48, padding=0, dilation=1, ceil_mode=False)
+    (1): MaxPool1d(kernel_size=47, stride=47, padding=0, dilation=1, ceil_mode=False)
+    (2): MaxPool1d(kernel_size=46, stride=46, padding=0, dilation=1, ceil_mode=False)
+  )
+  (dropout): Dropout(p=0.5, inplace=False)
+  (relu): ReLU()
+  (fc_out): Sequential(
+    (0): Linear(in_features=600, out_features=300, bias=True)
+    (1): Dropout(p=0.5, inplace=False)
+    (2): ReLU()
+    (3): Linear(in_features=300, out_features=4, bias=True)
+  )
+)
+
+Epoch  1 / 30
+Batch[0] - loss: 1.318834  acc: 37.5000%(6/16)
+Batch[1] - loss: 1.431293  acc: 12.5000%(2/16)
+Batch[2] - loss: 1.523144  acc: 12.5000%(2/16)
+Batch[3] - loss: 1.366332  acc: 37.5000%(6/16)
+Batch[4] - loss: 1.386369  acc: 18.7500%(3/16)
+Batch[5] - loss: 1.397025  acc: 37.5000%(6/16)
+Batch[6] - loss: 1.348122  acc: 25.0000%(4/16)
+Batch[7] - loss: 1.417551  acc: 18.7500%(3/16)
+Batch[8] - loss: 1.394022  acc: 25.0000%(4/16)
+Batch[9] - loss: 1.364858  acc: 31.2500%(5/16)
+Batch[10] - loss: 1.297411  acc: 43.7500%(7/16)
+Batch[11] - loss: 1.407547  acc: 12.5000%(2/16)
+Batch[12] - loss: 1.455625  acc: 18.7500%(3/16)
+Batch[13] - loss: 1.316242  acc: 37.5000%(6/16)
+Batch[14] - loss: 1.416173  acc: 31.2500%(5/16)
+Batch[15] - loss: 1.414984  acc: 12.5000%(2/16)
+Batch[16] - loss: 1.425748  acc: 18.7500%(3/16)
+Batch[17] - loss: 1.318797  acc: 43.7500%(7/16)
+Batch[18] - loss: 1.334100  acc: 43.7500%(7/16)
+Batch[19] - loss: 1.310488  acc: 43.7500%(7/16)
+Batch[20] - loss: 1.394981  acc: 12.5000%(2/16)
+Batch[21] - loss: 1.281311  acc: 31.2500%(5/16)
+Batch[22] - loss: 1.421566  acc: 18.7500%(3/16)
+Batch[23] - loss: 1.293582  acc: 50.0000%(8/16)
+Batch[24] - loss: 1.339020  acc: 25.0000%(4/16)
+Batch[25] - loss: 1.339428  acc: 25.0000%(4/16)
+Batch[26] - loss: 1.302104  acc: 43.7500%(7/16)
+Batch[27] - loss: 1.345094  acc: 25.0000%(4/16)
+Batch[28] - loss: 1.196996  acc: 50.0000%(8/16)
+Batch[29] - loss: 1.287975  acc: 43.7500%(7/16)
+Batch[30] - loss: 1.605749  acc: 31.2500%(5/16)
+Batch[31] - loss: 1.457616  acc: 31.2500%(5/16)
+Batch[32] - loss: 1.580138  acc: 25.0000%(4/16)
+Batch[33] - loss: 1.400244  acc: 25.0000%(4/16)
+Batch[34] - loss: 1.283647  acc: 50.0000%(4/8)
+Average loss:1.376403 average acc:30.000000%
+              precision    recall  f1-score   support
+
+          NR    1.00000   0.15000   0.26087        20
+          FR    0.50000   0.04762   0.08696        21
+          UR    0.29091   0.80000   0.42667        20
+          TR    0.63636   0.66667   0.65116        21
+
+    accuracy                        0.41463        82
+   macro avg    0.60682   0.41607   0.35641        82
+weighted avg    0.60588   0.41463   0.35672        82
+
+Val set acc: 0.4146341463414634
+Best val set acc: 0.4146341463414634
+save model!!!
+
+Epoch  2 / 30
+Batch[0] - loss: 1.366333  acc: 31.2500%(5/16)
+Batch[1] - loss: 1.304855  acc: 56.2500%(9/16)
+Batch[2] - loss: 1.399473  acc: 37.5000%(6/16)
+Batch[3] - loss: 1.416865  acc: 31.2500%(5/16)
+Batch[4] - loss: 1.304224  acc: 43.7500%(7/16)
+Batch[5] - loss: 1.426466  acc: 18.7500%(3/16)
+Batch[6] - loss: 1.296549  acc: 37.5000%(6/16)
+Batch[7] - loss: 1.405500  acc: 12.5000%(2/16)
+Batch[8] - loss: 1.309512  acc: 31.2500%(5/16)
+Batch[9] - loss: 1.350009  acc: 25.0000%(4/16)
+Batch[10] - loss: 1.281432  acc: 50.0000%(8/16)
+Batch[11] - loss: 1.305006  acc: 43.7500%(7/16)
+Batch[12] - loss: 1.253433  acc: 43.7500%(7/16)
+Batch[13] - loss: 1.293902  acc: 37.5000%(6/16)
+Batch[14] - loss: 1.266304  acc: 50.0000%(8/16)
+Batch[15] - loss: 1.198156  acc: 50.0000%(8/16)
+Batch[16] - loss: 1.323467  acc: 43.7500%(7/16)
+Batch[17] - loss: 1.288294  acc: 31.2500%(5/16)
+Batch[18] - loss: 1.366067  acc: 25.0000%(4/16)
+Batch[19] - loss: 1.436005  acc: 18.7500%(3/16)
+Batch[20] - loss: 1.453566  acc: 12.5000%(2/16)
+Batch[21] - loss: 1.250785  acc: 37.5000%(6/16)
+Batch[22] - loss: 1.249593  acc: 43.7500%(7/16)
+Batch[23] - loss: 1.357066  acc: 31.2500%(5/16)
+Batch[24] - loss: 1.358524  acc: 43.7500%(7/16)
+Batch[25] - loss: 1.197621  acc: 50.0000%(8/16)
+Batch[26] - loss: 1.217961  acc: 50.0000%(8/16)
+Batch[27] - loss: 1.245338  acc: 56.2500%(9/16)
+Batch[28] - loss: 1.404938  acc: 31.2500%(5/16)
+Batch[29] - loss: 1.236671  acc: 56.2500%(9/16)
+Batch[30] - loss: 1.187333  acc: 43.7500%(7/16)
+Batch[31] - loss: 1.244884  acc: 37.5000%(6/16)
+Batch[32] - loss: 1.150441  acc: 62.5000%(10/16)
+Batch[33] - loss: 1.273020  acc: 50.0000%(8/16)
+Batch[34] - loss: 1.304132  acc: 50.0000%(4/8)
+Average loss:1.306392 average acc:39.285713%
+              precision    recall  f1-score   support
+
+          NR    0.48148   0.65000   0.55319        20
+          FR    0.80000   0.19048   0.30769        21
+          UR    0.46667   0.35000   0.40000        20
+          TR    0.54286   0.90476   0.67857        21
+
+    accuracy                        0.52439        82
+   macro avg    0.57275   0.52381   0.48486        82
+weighted avg    0.57516   0.52439   0.48507        82
+
+Val set acc: 0.524390243902439
+Best val set acc: 0.524390243902439
+save model!!!
+
+Epoch  3 / 30
+Batch[0] - loss: 1.271534  acc: 25.0000%(4/16)
+Batch[1] - loss: 1.141957  acc: 43.7500%(7/16)
+Batch[2] - loss: 1.171489  acc: 56.2500%(9/16)
+Batch[3] - loss: 1.140890  acc: 56.2500%(9/16)
+Batch[4] - loss: 1.256773  acc: 43.7500%(7/16)
+Batch[5] - loss: 1.489507  acc: 12.5000%(2/16)
+Batch[6] - loss: 1.169107  acc: 43.7500%(7/16)
+Batch[7] - loss: 1.151449  acc: 50.0000%(8/16)
+Batch[8] - loss: 1.125818  acc: 43.7500%(7/16)
+Batch[9] - loss: 1.281247  acc: 62.5000%(10/16)
+Batch[10] - loss: 1.186583  acc: 50.0000%(8/16)
+Batch[11] - loss: 0.985538  acc: 81.2500%(13/16)
+Batch[12] - loss: 1.022298  acc: 75.0000%(12/16)
+Batch[13] - loss: 0.991825  acc: 75.0000%(12/16)
+Batch[14] - loss: 1.083170  acc: 62.5000%(10/16)
+Batch[15] - loss: 1.052330  acc: 56.2500%(9/16)
+Batch[16] - loss: 1.132049  acc: 56.2500%(9/16)
+Batch[17] - loss: 1.090510  acc: 56.2500%(9/16)
+Batch[18] - loss: 1.112156  acc: 43.7500%(7/16)
+Batch[19] - loss: 1.155344  acc: 31.2500%(5/16)
+Batch[20] - loss: 1.088805  acc: 50.0000%(8/16)
+Batch[21] - loss: 1.139811  acc: 56.2500%(9/16)
+Batch[22] - loss: 1.190571  acc: 50.0000%(8/16)
+Batch[23] - loss: 0.806270  acc: 81.2500%(13/16)
+Batch[24] - loss: 0.895725  acc: 68.7500%(11/16)
+Batch[25] - loss: 1.068418  acc: 62.5000%(10/16)
+Batch[26] - loss: 1.059781  acc: 62.5000%(10/16)
+Batch[27] - loss: 0.902797  acc: 68.7500%(11/16)
+Batch[28] - loss: 0.812334  acc: 68.7500%(11/16)
+Batch[29] - loss: 1.039181  acc: 50.0000%(8/16)
+Batch[30] - loss: 1.025219  acc: 56.2500%(9/16)
+Batch[31] - loss: 0.961308  acc: 62.5000%(10/16)
+Batch[32] - loss: 0.852682  acc: 68.7500%(11/16)
+Batch[33] - loss: 0.979917  acc: 62.5000%(10/16)
+Batch[34] - loss: 1.517116  acc: 50.0000%(4/8)
+Average loss:1.095757 average acc:55.535713%
+              precision    recall  f1-score   support
+
+          NR    0.66667   0.50000   0.57143        20
+          FR    0.53846   0.66667   0.59574        21
+          UR    0.63636   0.70000   0.66667        20
+          TR    0.73684   0.66667   0.70000        21
+
+    accuracy                        0.63415        82
+   macro avg    0.64458   0.63333   0.63346        82
+weighted avg    0.64441   0.63415   0.63381        82
+
+Val set acc: 0.6341463414634146
+Best val set acc: 0.6341463414634146
+save model!!!
+
+Epoch  4 / 30
+Batch[0] - loss: 0.788581  acc: 68.7500%(11/16)
+Batch[1] - loss: 0.753792  acc: 68.7500%(11/16)
+Batch[2] - loss: 0.826752  acc: 75.0000%(12/16)
+Batch[3] - loss: 0.729070  acc: 81.2500%(13/16)
+Batch[4] - loss: 0.874471  acc: 62.5000%(10/16)
+Batch[5] - loss: 0.593790  acc: 93.7500%(15/16)
+Batch[6] - loss: 0.889615  acc: 68.7500%(11/16)
+Batch[7] - loss: 0.834518  acc: 75.0000%(12/16)
+Batch[8] - loss: 0.932097  acc: 68.7500%(11/16)
+Batch[9] - loss: 0.799399  acc: 81.2500%(13/16)
+Batch[10] - loss: 0.774534  acc: 62.5000%(10/16)
+Batch[11] - loss: 0.913502  acc: 62.5000%(10/16)
+Batch[12] - loss: 0.822438  acc: 68.7500%(11/16)
+Batch[13] - loss: 0.849062  acc: 68.7500%(11/16)
+Batch[14] - loss: 0.921466  acc: 62.5000%(10/16)
+Batch[15] - loss: 0.820324  acc: 75.0000%(12/16)
+Batch[16] - loss: 0.949303  acc: 62.5000%(10/16)
+Batch[17] - loss: 0.799259  acc: 68.7500%(11/16)
+Batch[18] - loss: 0.732774  acc: 68.7500%(11/16)
+Batch[19] - loss: 0.680799  acc: 81.2500%(13/16)
+Batch[20] - loss: 0.632538  acc: 81.2500%(13/16)
+Batch[21] - loss: 0.711710  acc: 87.5000%(14/16)
+Batch[22] - loss: 0.916651  acc: 62.5000%(10/16)
+Batch[23] - loss: 0.921402  acc: 43.7500%(7/16)
+Batch[24] - loss: 0.839956  acc: 62.5000%(10/16)
+Batch[25] - loss: 0.743433  acc: 68.7500%(11/16)
+Batch[26] - loss: 0.507988  acc: 87.5000%(14/16)
+Batch[27] - loss: 0.719881  acc: 68.7500%(11/16)
+Batch[28] - loss: 0.510378  acc: 75.0000%(12/16)
+Batch[29] - loss: 0.786828  acc: 62.5000%(10/16)
+Batch[30] - loss: 0.621845  acc: 87.5000%(14/16)
+Batch[31] - loss: 0.656534  acc: 68.7500%(11/16)
+Batch[32] - loss: 0.614428  acc: 68.7500%(11/16)
+Batch[33] - loss: 0.684106  acc: 81.2500%(13/16)
+Batch[34] - loss: 0.261086  acc: 87.5000%(7/8)
+Average loss:0.754695 average acc:71.964287%
+              precision    recall  f1-score   support
+
+          NR    0.62500   0.75000   0.68182        20
+          FR    0.88889   0.38095   0.53333        21
+          UR    0.61538   0.80000   0.69565        20
+          TR    0.78261   0.85714   0.81818        21
+
+    accuracy                        0.69512        82
+   macro avg    0.72797   0.69702   0.68225        82
+weighted avg    0.73060   0.69512   0.68209        82
+
+Val set acc: 0.6951219512195121
+Best val set acc: 0.6951219512195121
+save model!!!
+
+Epoch  5 / 30
+Batch[0] - loss: 0.759404  acc: 68.7500%(11/16)
+Batch[1] - loss: 0.420898  acc: 87.5000%(14/16)
+Batch[2] - loss: 0.524976  acc: 81.2500%(13/16)
+Batch[3] - loss: 0.575378  acc: 81.2500%(13/16)
+Batch[4] - loss: 0.403896  acc: 87.5000%(14/16)
+Batch[5] - loss: 0.716034  acc: 68.7500%(11/16)
+Batch[6] - loss: 0.661420  acc: 68.7500%(11/16)
+Batch[7] - loss: 0.398473  acc: 87.5000%(14/16)
+Batch[8] - loss: 0.269092  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.459637  acc: 87.5000%(14/16)
+Batch[10] - loss: 0.497976  acc: 87.5000%(14/16)
+Batch[11] - loss: 0.372231  acc: 87.5000%(14/16)
+Batch[12] - loss: 0.538145  acc: 87.5000%(14/16)
+Batch[13] - loss: 0.251842  acc: 93.7500%(15/16)
+Batch[14] - loss: 0.395483  acc: 87.5000%(14/16)
+Batch[15] - loss: 0.261370  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.650519  acc: 81.2500%(13/16)
+Batch[17] - loss: 0.406578  acc: 93.7500%(15/16)
+Batch[18] - loss: 0.402215  acc: 87.5000%(14/16)
+Batch[19] - loss: 0.195118  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.753174  acc: 75.0000%(12/16)
+Batch[21] - loss: 0.385578  acc: 81.2500%(13/16)
+Batch[22] - loss: 0.363181  acc: 93.7500%(15/16)
+Batch[23] - loss: 0.410680  acc: 81.2500%(13/16)
+Batch[24] - loss: 0.328757  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.468528  acc: 75.0000%(12/16)
+Batch[26] - loss: 0.955795  acc: 62.5000%(10/16)
+Batch[27] - loss: 0.539835  acc: 81.2500%(13/16)
+Batch[28] - loss: 0.194831  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.295035  acc: 93.7500%(15/16)
+Batch[30] - loss: 0.565525  acc: 87.5000%(14/16)
+Batch[31] - loss: 0.443925  acc: 81.2500%(13/16)
+Batch[32] - loss: 0.206648  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.206709  acc: 93.7500%(15/16)
+Batch[34] - loss: 0.588682  acc: 62.5000%(5/8)
+Average loss:0.453359 average acc:85.535713%
+              precision    recall  f1-score   support
+
+          NR    0.82353   0.70000   0.75676        20
+          FR    0.87500   0.66667   0.75676        21
+          UR    0.65517   0.95000   0.77551        20
+          TR    0.90000   0.85714   0.87805        21
+
+    accuracy                        0.79268        82
+   macro avg    0.81343   0.79345   0.79177        82
+weighted avg    0.81523   0.79268   0.79239        82
+
+Val set acc: 0.7926829268292683
+Best val set acc: 0.7926829268292683
+save model!!!
+
+Epoch  6 / 30
+Batch[0] - loss: 0.261549  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.403127  acc: 75.0000%(12/16)
+Batch[2] - loss: 0.271045  acc: 93.7500%(15/16)
+Batch[3] - loss: 0.261437  acc: 93.7500%(15/16)
+Batch[4] - loss: 0.225900  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.329363  acc: 93.7500%(15/16)
+Batch[6] - loss: 0.126933  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.845420  acc: 87.5000%(14/16)
+Batch[8] - loss: 0.177068  acc: 93.7500%(15/16)
+Batch[9] - loss: 0.293580  acc: 87.5000%(14/16)
+Batch[10] - loss: 0.345236  acc: 81.2500%(13/16)
+Batch[11] - loss: 0.210917  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.543363  acc: 81.2500%(13/16)
+Batch[13] - loss: 0.244936  acc: 87.5000%(14/16)
+Batch[14] - loss: 0.123607  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.139882  acc: 93.7500%(15/16)
+Batch[16] - loss: 0.150346  acc: 93.7500%(15/16)
+Batch[17] - loss: 0.089846  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.252160  acc: 93.7500%(15/16)
+Batch[19] - loss: 0.163370  acc: 93.7500%(15/16)
+Batch[20] - loss: 0.119108  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.125672  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.104115  acc: 93.7500%(15/16)
+Batch[23] - loss: 0.316296  acc: 93.7500%(15/16)
+Batch[24] - loss: 0.107796  acc: 93.7500%(15/16)
+Batch[25] - loss: 0.198647  acc: 87.5000%(14/16)
+Batch[26] - loss: 0.125589  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.356162  acc: 87.5000%(14/16)
+Batch[28] - loss: 0.129139  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.195063  acc: 87.5000%(14/16)
+Batch[30] - loss: 0.139256  acc: 93.7500%(15/16)
+Batch[31] - loss: 0.116119  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.064336  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.185154  acc: 93.7500%(15/16)
+Batch[34] - loss: 0.168505  acc: 87.5000%(7/8)
+Average loss:0.226001 average acc:93.392860%
+              precision    recall  f1-score   support
+
+          NR    0.83333   0.75000   0.78947        20
+          FR    0.85714   0.57143   0.68571        21
+          UR    0.63333   0.95000   0.76000        20
+          TR    0.90000   0.85714   0.87805        21
+
+    accuracy                        0.78049        82
+   macro avg    0.80595   0.78214   0.77831        82
+weighted avg    0.80772   0.78049   0.77840        82
+
+
+Epoch  7 / 30
+Batch[0] - loss: 0.220967  acc: 93.7500%(15/16)
+Batch[1] - loss: 0.044879  acc: 100.0000%(16/16)
+Batch[2] - loss: 0.264899  acc: 93.7500%(15/16)
+Batch[3] - loss: 0.276245  acc: 87.5000%(14/16)
+Batch[4] - loss: 0.322807  acc: 93.7500%(15/16)
+Batch[5] - loss: 0.109542  acc: 93.7500%(15/16)
+Batch[6] - loss: 0.207950  acc: 87.5000%(14/16)
+Batch[7] - loss: 0.075681  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.032931  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.053048  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.178818  acc: 93.7500%(15/16)
+Batch[11] - loss: 0.172455  acc: 87.5000%(14/16)
+Batch[12] - loss: 0.242855  acc: 93.7500%(15/16)
+Batch[13] - loss: 0.094074  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.164185  acc: 93.7500%(15/16)
+Batch[15] - loss: 0.089196  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.055542  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.049498  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.164277  acc: 93.7500%(15/16)
+Batch[19] - loss: 0.079399  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.122803  acc: 93.7500%(15/16)
+Batch[21] - loss: 0.092984  acc: 93.7500%(15/16)
+Batch[22] - loss: 0.585384  acc: 75.0000%(12/16)
+Batch[23] - loss: 0.048315  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.122231  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.089312  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.066201  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.127511  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.195100  acc: 93.7500%(15/16)
+Batch[29] - loss: 0.088114  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.101099  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.020307  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.227343  acc: 87.5000%(14/16)
+Batch[33] - loss: 0.024494  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.035641  acc: 100.0000%(8/8)
+Average loss:0.138460 average acc:95.892860%
+              precision    recall  f1-score   support
+
+          NR    0.75000   0.90000   0.81818        20
+          FR    0.84211   0.76190   0.80000        21
+          UR    0.80952   0.85000   0.82927        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.84146        82
+   macro avg    0.85041   0.84226   0.84263        82
+weighted avg    0.85213   0.84146   0.84309        82
+
+Val set acc: 0.8414634146341463
+Best val set acc: 0.8414634146341463
+save model!!!
+
+Epoch  8 / 30
+Batch[0] - loss: 0.061141  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.146242  acc: 93.7500%(15/16)
+Batch[2] - loss: 0.057783  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.190521  acc: 93.7500%(15/16)
+Batch[4] - loss: 0.039685  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.019942  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.054625  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.128860  acc: 93.7500%(15/16)
+Batch[8] - loss: 0.029319  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.026710  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.051208  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.077206  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.032177  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.009911  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.020609  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.041361  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.097295  acc: 93.7500%(15/16)
+Batch[17] - loss: 0.367762  acc: 87.5000%(14/16)
+Batch[18] - loss: 0.129349  acc: 93.7500%(15/16)
+Batch[19] - loss: 0.025632  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.060748  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.012875  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.068732  acc: 100.0000%(16/16)
+Batch[23] - loss: 0.035165  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.104179  acc: 93.7500%(15/16)
+Batch[25] - loss: 0.073627  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.040437  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.112751  acc: 93.7500%(15/16)
+Batch[28] - loss: 0.048225  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.010709  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.027591  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.026958  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.061010  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.024186  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.246696  acc: 87.5000%(7/8)
+Average loss:0.073178 average acc:98.035713%
+              precision    recall  f1-score   support
+
+          NR    0.72000   0.90000   0.80000        20
+          FR    0.88235   0.71429   0.78947        21
+          UR    0.81818   0.90000   0.85714        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.84146        82
+   macro avg    0.85513   0.84286   0.84242        82
+weighted avg    0.85723   0.84146   0.84276        82
+
+
+Epoch  9 / 30
+Batch[0] - loss: 0.010773  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.056776  acc: 100.0000%(16/16)
+Batch[2] - loss: 0.005597  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.034389  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.216851  acc: 93.7500%(15/16)
+Batch[5] - loss: 0.122930  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.093770  acc: 93.7500%(15/16)
+Batch[7] - loss: 0.120810  acc: 93.7500%(15/16)
+Batch[8] - loss: 0.022506  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.032398  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.036594  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.007651  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.076424  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.155250  acc: 87.5000%(14/16)
+Batch[14] - loss: 0.008697  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.057069  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.251634  acc: 93.7500%(15/16)
+Batch[17] - loss: 0.053987  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.211195  acc: 93.7500%(15/16)
+Batch[19] - loss: 0.021541  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.052216  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.015681  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.022696  acc: 100.0000%(16/16)
+Batch[23] - loss: 0.047688  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.018912  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.028207  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.138671  acc: 93.7500%(15/16)
+Batch[27] - loss: 0.029560  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.038781  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.071174  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.008844  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.074032  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.061789  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.019896  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.061865  acc: 100.0000%(8/8)
+Average loss:0.065339 average acc:98.571426%
+              precision    recall  f1-score   support
+
+          NR    0.75000   0.90000   0.81818        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.86364   0.95000   0.90476        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87563   0.86726   0.86663        82
+weighted avg    0.87731   0.86585   0.86676        82
+
+Val set acc: 0.8658536585365854
+Best val set acc: 0.8658536585365854
+save model!!!
+
+Epoch  10 / 30
+Batch[0] - loss: 0.043689  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.028743  acc: 100.0000%(16/16)
+Batch[2] - loss: 0.024295  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.019292  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.105213  acc: 93.7500%(15/16)
+Batch[5] - loss: 0.007504  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.014901  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.009241  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.067667  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.026714  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.023892  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.006184  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.011728  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.002685  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.122525  acc: 93.7500%(15/16)
+Batch[15] - loss: 0.061561  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.026524  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.005294  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.009416  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.031876  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.005318  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.002341  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.059882  acc: 100.0000%(16/16)
+Batch[23] - loss: 0.016841  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.063482  acc: 93.7500%(15/16)
+Batch[25] - loss: 0.034030  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.032658  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.142059  acc: 93.7500%(15/16)
+Batch[28] - loss: 0.129780  acc: 93.7500%(15/16)
+Batch[29] - loss: 0.004735  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.010819  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.007749  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.059803  acc: 93.7500%(15/16)
+Batch[33] - loss: 0.078684  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.019846  acc: 100.0000%(8/8)
+Average loss:0.037628 average acc:98.928574%
+              precision    recall  f1-score   support
+
+          NR    0.75000   0.90000   0.81818        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.86364   0.95000   0.90476        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87563   0.86726   0.86663        82
+weighted avg    0.87731   0.86585   0.86676        82
+
+
+Epoch  11 / 30
+Batch[0] - loss: 0.006330  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.043975  acc: 100.0000%(16/16)
+Batch[2] - loss: 0.013933  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.002714  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.004557  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.005522  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.005637  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.002125  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.015323  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.023932  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.009101  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.010450  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.009840  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.147195  acc: 93.7500%(15/16)
+Batch[14] - loss: 0.005259  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.078727  acc: 93.7500%(15/16)
+Batch[16] - loss: 0.004871  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.018442  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.060899  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.026820  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.018241  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.006688  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.002761  acc: 100.0000%(16/16)
+Batch[23] - loss: 0.021380  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.058327  acc: 93.7500%(15/16)
+Batch[25] - loss: 0.030076  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.003529  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.010713  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.006030  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.110721  acc: 93.7500%(15/16)
+Batch[30] - loss: 0.229052  acc: 93.7500%(15/16)
+Batch[31] - loss: 0.013979  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.019230  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.011576  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.020083  acc: 100.0000%(8/8)
+Average loss:0.030230 average acc:99.107147%
+              precision    recall  f1-score   support
+
+          NR    0.81818   0.90000   0.85714        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.79167   0.95000   0.86364        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87468   0.86726   0.86609        82
+weighted avg    0.87639   0.86585   0.86623        82
+
+
+Epoch  12 / 30
+Batch[0] - loss: 0.004243  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.003977  acc: 100.0000%(16/16)
+Batch[2] - loss: 0.002737  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.002448  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.112441  acc: 93.7500%(15/16)
+Batch[5] - loss: 0.004525  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.006508  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.035674  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.056535  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.000859  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.001420  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.008822  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.030042  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.009190  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.012652  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.016983  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.002816  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.004587  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.026844  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.036035  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.007916  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.002224  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.003464  acc: 100.0000%(16/16)
+Batch[23] - loss: 0.002474  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.076007  acc: 93.7500%(15/16)
+Batch[25] - loss: 0.012026  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.006760  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.036513  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.098436  acc: 93.7500%(15/16)
+Batch[29] - loss: 0.004851  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.011518  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.013153  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.001788  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.007668  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.001231  acc: 100.0000%(8/8)
+Average loss:0.019010 average acc:99.464287%
+              precision    recall  f1-score   support
+
+          NR    0.78261   0.90000   0.83721        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.82609   0.95000   0.88372        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87440   0.86726   0.86613        82
+weighted avg    0.87610   0.86585   0.86627        82
+
+
+Epoch  13 / 30
+Batch[0] - loss: 0.013810  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.069700  acc: 93.7500%(15/16)
+Batch[2] - loss: 0.002595  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.005436  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.004477  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.015160  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.323265  acc: 93.7500%(15/16)
+Batch[7] - loss: 0.011965  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.002944  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.002514  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.003008  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.044989  acc: 93.7500%(15/16)
+Batch[12] - loss: 0.003073  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.004659  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.004330  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.037944  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.007631  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.002163  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.008455  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.001895  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.060868  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.007506  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.016449  acc: 100.0000%(16/16)
+Batch[23] - loss: 0.004174  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.246395  acc: 93.7500%(15/16)
+Batch[25] - loss: 0.003462  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.006772  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.001766  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.039864  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.045421  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.033332  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.013378  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.005666  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.187838  acc: 93.7500%(15/16)
+Batch[34] - loss: 0.015661  acc: 100.0000%(8/8)
+Average loss:0.035959 average acc:99.107147%
+              precision    recall  f1-score   support
+
+          NR    0.78261   0.90000   0.83721        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.82609   0.95000   0.88372        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87440   0.86726   0.86613        82
+weighted avg    0.87610   0.86585   0.86627        82
+
+
+Epoch  14 / 30
+Batch[0] - loss: 0.002095  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.005998  acc: 100.0000%(16/16)
+Batch[2] - loss: 0.016202  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.056670  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.003320  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.005139  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.004357  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.013614  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.010430  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.006129  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.000957  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.016515  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.031879  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.002489  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.412034  acc: 93.7500%(15/16)
+Batch[15] - loss: 0.002003  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.007979  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.007413  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.001938  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.014444  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.011031  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.021633  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.023835  acc: 100.0000%(16/16)
+Batch[23] - loss: 0.013221  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.017101  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.063752  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.006287  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.011520  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.008264  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.005460  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.005211  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.001552  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.040933  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.000838  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.006440  acc: 100.0000%(8/8)
+Average loss:0.024534 average acc:99.821426%
+Reload the best model...
+0.0005
+              precision    recall  f1-score   support
+
+          NR    0.75000   0.90000   0.81818        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.86364   0.95000   0.90476        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87563   0.86726   0.86663        82
+weighted avg    0.87731   0.86585   0.86676        82
+
+
+Epoch  15 / 30
+Batch[0] - loss: 0.174438  acc: 93.7500%(15/16)
+Batch[1] - loss: 0.112441  acc: 93.7500%(15/16)
+Batch[2] - loss: 0.068210  acc: 93.7500%(15/16)
+Batch[3] - loss: 0.018080  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.011309  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.119398  acc: 93.7500%(15/16)
+Batch[6] - loss: 0.038816  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.081777  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.010488  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.020857  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.028604  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.026981  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.005234  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.013466  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.011635  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.028412  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.015049  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.004606  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.140392  acc: 87.5000%(14/16)
+Batch[19] - loss: 0.140534  acc: 93.7500%(15/16)
+Batch[20] - loss: 0.009983  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.006889  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.125976  acc: 93.7500%(15/16)
+Batch[23] - loss: 0.049496  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.020337  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.071817  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.031290  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.004445  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.210021  acc: 93.7500%(15/16)
+Batch[29] - loss: 0.016463  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.017232  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.037700  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.059174  acc: 93.7500%(15/16)
+Batch[33] - loss: 0.007969  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.009034  acc: 100.0000%(8/8)
+Average loss:0.049959 average acc:98.214287%
+              precision    recall  f1-score   support
+
+          NR    0.75000   0.90000   0.81818        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.86364   0.95000   0.90476        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87563   0.86726   0.86663        82
+weighted avg    0.87731   0.86585   0.86676        82
+
+
+Epoch  16 / 30
+Batch[0] - loss: 0.013021  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.008316  acc: 100.0000%(16/16)
+Batch[2] - loss: 0.030829  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.015096  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.002663  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.014115  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.004694  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.008888  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.019795  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.020236  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.015523  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.007451  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.011809  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.023440  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.014881  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.001423  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.585550  acc: 93.7500%(15/16)
+Batch[17] - loss: 0.011413  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.013881  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.046156  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.004736  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.013396  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.004060  acc: 100.0000%(16/16)
+Batch[23] - loss: 0.038425  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.030187  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.028178  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.088590  acc: 93.7500%(15/16)
+Batch[27] - loss: 0.006956  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.084109  acc: 93.7500%(15/16)
+Batch[29] - loss: 0.020162  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.005925  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.005556  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.064429  acc: 93.7500%(15/16)
+Batch[33] - loss: 0.078517  acc: 93.7500%(15/16)
+Batch[34] - loss: 0.000630  acc: 100.0000%(8/8)
+Average loss:0.038372 average acc:99.107147%
+              precision    recall  f1-score   support
+
+          NR    0.72727   0.80000   0.76190        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.79167   0.95000   0.86364        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.84146        82
+   macro avg    0.85196   0.84226   0.84228        82
+weighted avg    0.85421   0.84146   0.84300        82
+
+
+Epoch  17 / 30
+Batch[0] - loss: 0.016518  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.012145  acc: 100.0000%(16/16)
+Batch[2] - loss: 0.006279  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.161281  acc: 93.7500%(15/16)
+Batch[4] - loss: 0.009705  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.011569  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.027991  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.002910  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.034459  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.009167  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.006031  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.038345  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.012182  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.010631  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.007869  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.111126  acc: 93.7500%(15/16)
+Batch[16] - loss: 0.015654  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.005961  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.014305  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.022188  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.012248  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.007636  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.042302  acc: 100.0000%(16/16)
+Batch[23] - loss: 0.198653  acc: 93.7500%(15/16)
+Batch[24] - loss: 0.070722  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.007460  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.014234  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.012309  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.011740  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.026426  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.028116  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.006886  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.014321  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.052218  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.036133  acc: 100.0000%(8/8)
+Average loss:0.030792 average acc:99.464287%
+              precision    recall  f1-score   support
+
+          NR    0.73913   0.85000   0.79070        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.82609   0.95000   0.88372        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.85366        82
+   macro avg    0.86353   0.85476   0.85450        82
+weighted avg    0.86550   0.85366   0.85492        82
+
+
+Epoch  18 / 30
+Batch[0] - loss: 0.009284  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.002788  acc: 100.0000%(16/16)
+Batch[2] - loss: 0.004052  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.021637  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.074661  acc: 93.7500%(15/16)
+Batch[5] - loss: 0.004366  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.005045  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.010271  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.026957  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.021757  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.031666  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.027112  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.008549  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.014050  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.005658  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.006393  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.003435  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.048154  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.016322  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.018230  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.002145  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.000781  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.065026  acc: 93.7500%(15/16)
+Batch[23] - loss: 0.003478  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.011882  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.002996  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.004749  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.018012  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.023806  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.007647  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.031272  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.028805  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.004997  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.062038  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.025207  acc: 100.0000%(8/8)
+Average loss:0.018664 average acc:99.642860%
+Reload the best model...
+0.00025
+              precision    recall  f1-score   support
+
+          NR    0.75000   0.90000   0.81818        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.86364   0.95000   0.90476        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87563   0.86726   0.86663        82
+weighted avg    0.87731   0.86585   0.86676        82
+
+
+Epoch  19 / 30
+Batch[0] - loss: 0.044244  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.028447  acc: 100.0000%(16/16)
+Batch[2] - loss: 0.008420  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.010735  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.003887  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.132259  acc: 93.7500%(15/16)
+Batch[6] - loss: 0.087437  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.017311  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.130777  acc: 93.7500%(15/16)
+Batch[9] - loss: 0.006710  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.006167  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.085049  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.074357  acc: 93.7500%(15/16)
+Batch[13] - loss: 0.009236  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.008120  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.016164  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.008624  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.007820  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.076050  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.008931  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.004138  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.026828  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.092367  acc: 93.7500%(15/16)
+Batch[23] - loss: 0.093523  acc: 93.7500%(15/16)
+Batch[24] - loss: 0.005853  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.027734  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.025460  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.019641  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.012171  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.014222  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.011639  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.110615  acc: 93.7500%(15/16)
+Batch[32] - loss: 0.019564  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.010065  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.001925  acc: 100.0000%(8/8)
+Average loss:0.035614 average acc:98.928574%
+              precision    recall  f1-score   support
+
+          NR    0.75000   0.90000   0.81818        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.86364   0.95000   0.90476        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87563   0.86726   0.86663        82
+weighted avg    0.87731   0.86585   0.86676        82
+
+
+Epoch  20 / 30
+Batch[0] - loss: 0.034632  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.049281  acc: 100.0000%(16/16)
+Batch[2] - loss: 0.061317  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.012513  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.013989  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.018079  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.011394  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.007906  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.017188  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.015584  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.051124  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.019232  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.017986  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.045000  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.003681  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.018377  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.005458  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.013437  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.008749  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.007072  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.058311  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.187522  acc: 93.7500%(15/16)
+Batch[22] - loss: 0.009456  acc: 100.0000%(16/16)
+Batch[23] - loss: 0.008580  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.008516  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.016232  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.015974  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.040228  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.072290  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.035591  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.007997  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.030312  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.082109  acc: 93.7500%(15/16)
+Batch[33] - loss: 0.043535  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.198194  acc: 87.5000%(7/8)
+Average loss:0.035624 average acc:99.285713%
+              precision    recall  f1-score   support
+
+          NR    0.75000   0.90000   0.81818        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.86364   0.95000   0.90476        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87563   0.86726   0.86663        82
+weighted avg    0.87731   0.86585   0.86676        82
+
+
+Epoch  21 / 30
+Batch[0] - loss: 0.110360  acc: 93.7500%(15/16)
+Batch[1] - loss: 0.019614  acc: 100.0000%(16/16)
+Batch[2] - loss: 0.034456  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.010810  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.009391  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.005832  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.011331  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.020709  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.023782  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.032809  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.147961  acc: 93.7500%(15/16)
+Batch[11] - loss: 0.004973  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.003938  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.003449  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.032957  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.210706  acc: 93.7500%(15/16)
+Batch[16] - loss: 0.004235  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.099933  acc: 93.7500%(15/16)
+Batch[18] - loss: 0.045731  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.064708  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.021338  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.023038  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.069721  acc: 93.7500%(15/16)
+Batch[23] - loss: 0.009470  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.007149  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.009600  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.264364  acc: 93.7500%(15/16)
+Batch[27] - loss: 0.043414  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.028530  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.039284  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.067643  acc: 93.7500%(15/16)
+Batch[31] - loss: 0.021335  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.014805  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.004615  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.025503  acc: 100.0000%(8/8)
+Average loss:0.044214 average acc:98.750000%
+              precision    recall  f1-score   support
+
+          NR    0.80952   0.85000   0.82927        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.76000   0.95000   0.84444        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.85366        82
+   macro avg    0.86460   0.85476   0.85433        82
+weighted avg    0.86655   0.85366   0.85475        82
+
+
+Epoch  22 / 30
+Batch[0] - loss: 0.003976  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.055754  acc: 93.7500%(15/16)
+Batch[2] - loss: 0.007032  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.010219  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.003469  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.017545  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.027649  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.008165  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.006221  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.010587  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.013534  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.032718  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.149571  acc: 93.7500%(15/16)
+Batch[13] - loss: 0.006170  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.016229  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.024319  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.018579  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.005703  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.066182  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.021321  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.024125  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.017797  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.002356  acc: 100.0000%(16/16)
+Batch[23] - loss: 0.003089  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.093950  acc: 93.7500%(15/16)
+Batch[25] - loss: 0.005126  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.006809  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.005906  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.012912  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.010388  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.021234  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.037980  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.000651  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.011334  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.017496  acc: 100.0000%(8/8)
+Average loss:0.022174 average acc:99.464287%
+Reload the best model...
+0.000125
+              precision    recall  f1-score   support
+
+          NR    0.75000   0.90000   0.81818        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.86364   0.95000   0.90476        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87563   0.86726   0.86663        82
+weighted avg    0.87731   0.86585   0.86676        82
+
+
+Epoch  23 / 30
+Batch[0] - loss: 0.013361  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.001860  acc: 100.0000%(16/16)
+Batch[2] - loss: 0.013015  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.129264  acc: 93.7500%(15/16)
+Batch[4] - loss: 0.014452  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.001656  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.003748  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.083787  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.020139  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.022849  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.019274  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.032248  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.011264  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.069199  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.059615  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.072897  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.017995  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.027359  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.013411  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.007445  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.009068  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.071366  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.018982  acc: 100.0000%(16/16)
+Batch[23] - loss: 0.073520  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.013554  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.011877  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.001111  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.012957  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.024362  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.027376  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.049106  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.071873  acc: 93.7500%(15/16)
+Batch[32] - loss: 0.103242  acc: 93.7500%(15/16)
+Batch[33] - loss: 0.005415  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.023730  acc: 100.0000%(8/8)
+Average loss:0.032925 average acc:99.464287%
+              precision    recall  f1-score   support
+
+          NR    0.75000   0.90000   0.81818        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.86364   0.95000   0.90476        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87563   0.86726   0.86663        82
+weighted avg    0.87731   0.86585   0.86676        82
+
+
+Epoch  24 / 30
+Batch[0] - loss: 0.009047  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.009211  acc: 100.0000%(16/16)
+Batch[2] - loss: 0.020330  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.029383  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.007431  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.006953  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.023983  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.016060  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.006394  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.015197  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.112737  acc: 93.7500%(15/16)
+Batch[11] - loss: 0.015218  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.001492  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.004340  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.029190  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.008237  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.006340  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.061980  acc: 93.7500%(15/16)
+Batch[18] - loss: 0.020191  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.008233  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.033363  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.014578  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.031969  acc: 100.0000%(16/16)
+Batch[23] - loss: 0.010843  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.003360  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.016756  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.046123  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.019532  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.038348  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.007811  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.008472  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.022405  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.013811  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.040266  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.012180  acc: 100.0000%(8/8)
+Average loss:0.020907 average acc:99.642860%
+              precision    recall  f1-score   support
+
+          NR    0.75000   0.90000   0.81818        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.86364   0.95000   0.90476        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87563   0.86726   0.86663        82
+weighted avg    0.87731   0.86585   0.86676        82
+
+
+Epoch  25 / 30
+Batch[0] - loss: 0.049810  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.076902  acc: 93.7500%(15/16)
+Batch[2] - loss: 0.024131  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.021708  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.021636  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.034460  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.003573  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.010130  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.005809  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.078144  acc: 93.7500%(15/16)
+Batch[10] - loss: 0.003117  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.023616  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.027623  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.090098  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.007468  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.029019  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.101589  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.011189  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.001467  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.012068  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.027574  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.010761  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.002012  acc: 100.0000%(16/16)
+Batch[23] - loss: 0.139559  acc: 93.7500%(15/16)
+Batch[24] - loss: 0.022642  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.004406  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.047343  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.021048  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.050218  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.010570  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.009272  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.003795  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.026255  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.010940  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.044474  acc: 100.0000%(8/8)
+Average loss:0.030412 average acc:99.464287%
+              precision    recall  f1-score   support
+
+          NR    0.75000   0.90000   0.81818        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.86364   0.95000   0.90476        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87563   0.86726   0.86663        82
+weighted avg    0.87731   0.86585   0.86676        82
+
+
+Epoch  26 / 30
+Batch[0] - loss: 0.004227  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.015083  acc: 100.0000%(16/16)
+Batch[2] - loss: 0.010598  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.006511  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.001654  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.009150  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.027365  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.013835  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.032762  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.025366  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.105083  acc: 93.7500%(15/16)
+Batch[11] - loss: 0.034128  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.099897  acc: 93.7500%(15/16)
+Batch[13] - loss: 0.006032  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.035546  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.017745  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.022747  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.009879  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.004717  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.035860  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.070537  acc: 93.7500%(15/16)
+Batch[21] - loss: 0.003387  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.008008  acc: 100.0000%(16/16)
+Batch[23] - loss: 0.001955  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.053517  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.006812  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.025906  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.019339  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.036407  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.007137  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.052832  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.006630  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.014024  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.006037  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.003196  acc: 100.0000%(8/8)
+Average loss:0.023826 average acc:99.464287%
+Reload the best model...
+6.25e-05
+              precision    recall  f1-score   support
+
+          NR    0.75000   0.90000   0.81818        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.86364   0.95000   0.90476        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87563   0.86726   0.86663        82
+weighted avg    0.87731   0.86585   0.86676        82
+
+
+Epoch  27 / 30
+Batch[0] - loss: 0.044188  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.029275  acc: 100.0000%(16/16)
+Batch[2] - loss: 0.034553  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.014708  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.022124  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.008155  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.012727  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.009893  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.003626  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.037338  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.019898  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.033193  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.026570  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.006629  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.014593  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.002259  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.026049  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.050287  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.010541  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.025174  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.036217  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.061243  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.105832  acc: 93.7500%(15/16)
+Batch[23] - loss: 0.059380  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.040863  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.038126  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.028190  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.007516  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.037745  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.006487  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.038901  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.285968  acc: 93.7500%(15/16)
+Batch[32] - loss: 0.015785  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.010042  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.001189  acc: 100.0000%(8/8)
+Average loss:0.034436 average acc:99.642860%
+              precision    recall  f1-score   support
+
+          NR    0.75000   0.90000   0.81818        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.86364   0.95000   0.90476        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87563   0.86726   0.86663        82
+weighted avg    0.87731   0.86585   0.86676        82
+
+
+Epoch  28 / 30
+Batch[0] - loss: 0.014189  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.114523  acc: 93.7500%(15/16)
+Batch[2] - loss: 0.029077  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.030440  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.006748  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.005888  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.008169  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.017363  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.006783  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.009699  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.004147  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.021715  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.005678  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.018717  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.040459  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.114791  acc: 93.7500%(15/16)
+Batch[16] - loss: 0.017462  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.011281  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.060421  acc: 93.7500%(15/16)
+Batch[19] - loss: 0.019157  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.082638  acc: 93.7500%(15/16)
+Batch[21] - loss: 0.047345  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.003811  acc: 100.0000%(16/16)
+Batch[23] - loss: 0.010244  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.011682  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.006081  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.036996  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.016294  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.041537  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.032053  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.007404  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.014514  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.011645  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.040855  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.032805  acc: 100.0000%(8/8)
+Average loss:0.027218 average acc:99.285713%
+              precision    recall  f1-score   support
+
+          NR    0.75000   0.90000   0.81818        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.86364   0.95000   0.90476        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87563   0.86726   0.86663        82
+weighted avg    0.87731   0.86585   0.86676        82
+
+
+Epoch  29 / 30
+Batch[0] - loss: 0.008267  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.062129  acc: 100.0000%(16/16)
+Batch[2] - loss: 0.023047  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.031301  acc: 100.0000%(16/16)
+Batch[4] - loss: 0.010087  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.002717  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.129506  acc: 93.7500%(15/16)
+Batch[7] - loss: 0.333136  acc: 93.7500%(15/16)
+Batch[8] - loss: 0.023128  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.042066  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.179664  acc: 87.5000%(14/16)
+Batch[11] - loss: 0.013114  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.011117  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.016198  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.050654  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.019252  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.054142  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.003848  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.042282  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.003336  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.030620  acc: 100.0000%(16/16)
+Batch[21] - loss: 0.015324  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.026808  acc: 100.0000%(16/16)
+Batch[23] - loss: 0.008227  acc: 100.0000%(16/16)
+Batch[24] - loss: 0.057041  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.013320  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.139875  acc: 93.7500%(15/16)
+Batch[27] - loss: 0.011604  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.005694  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.007018  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.098434  acc: 93.7500%(15/16)
+Batch[31] - loss: 0.021236  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.017528  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.052352  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.019390  acc: 100.0000%(8/8)
+Average loss:0.045242 average acc:98.928574%
+              precision    recall  f1-score   support
+
+          NR    0.75000   0.90000   0.81818        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.86364   0.95000   0.90476        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87563   0.86726   0.86663        82
+weighted avg    0.87731   0.86585   0.86676        82
+
+
+Epoch  30 / 30
+Batch[0] - loss: 0.040913  acc: 100.0000%(16/16)
+Batch[1] - loss: 0.034750  acc: 100.0000%(16/16)
+Batch[2] - loss: 0.052977  acc: 100.0000%(16/16)
+Batch[3] - loss: 0.118874  acc: 93.7500%(15/16)
+Batch[4] - loss: 0.004544  acc: 100.0000%(16/16)
+Batch[5] - loss: 0.008547  acc: 100.0000%(16/16)
+Batch[6] - loss: 0.007528  acc: 100.0000%(16/16)
+Batch[7] - loss: 0.068628  acc: 100.0000%(16/16)
+Batch[8] - loss: 0.019147  acc: 100.0000%(16/16)
+Batch[9] - loss: 0.020550  acc: 100.0000%(16/16)
+Batch[10] - loss: 0.006507  acc: 100.0000%(16/16)
+Batch[11] - loss: 0.027372  acc: 100.0000%(16/16)
+Batch[12] - loss: 0.004849  acc: 100.0000%(16/16)
+Batch[13] - loss: 0.046413  acc: 100.0000%(16/16)
+Batch[14] - loss: 0.006985  acc: 100.0000%(16/16)
+Batch[15] - loss: 0.024310  acc: 100.0000%(16/16)
+Batch[16] - loss: 0.010927  acc: 100.0000%(16/16)
+Batch[17] - loss: 0.007627  acc: 100.0000%(16/16)
+Batch[18] - loss: 0.010531  acc: 100.0000%(16/16)
+Batch[19] - loss: 0.025907  acc: 100.0000%(16/16)
+Batch[20] - loss: 0.191284  acc: 93.7500%(15/16)
+Batch[21] - loss: 0.003165  acc: 100.0000%(16/16)
+Batch[22] - loss: 0.051352  acc: 100.0000%(16/16)
+Batch[23] - loss: 0.080205  acc: 93.7500%(15/16)
+Batch[24] - loss: 0.018242  acc: 100.0000%(16/16)
+Batch[25] - loss: 0.035194  acc: 100.0000%(16/16)
+Batch[26] - loss: 0.045611  acc: 100.0000%(16/16)
+Batch[27] - loss: 0.018080  acc: 100.0000%(16/16)
+Batch[28] - loss: 0.019974  acc: 100.0000%(16/16)
+Batch[29] - loss: 0.012845  acc: 100.0000%(16/16)
+Batch[30] - loss: 0.066528  acc: 100.0000%(16/16)
+Batch[31] - loss: 0.029789  acc: 100.0000%(16/16)
+Batch[32] - loss: 0.024340  acc: 100.0000%(16/16)
+Batch[33] - loss: 0.017199  acc: 100.0000%(16/16)
+Batch[34] - loss: 0.013930  acc: 100.0000%(8/8)
+Average loss:0.033589 average acc:99.464287%
+Reload the best model...
+3.125e-05
+              precision    recall  f1-score   support
+
+          NR    0.75000   0.90000   0.81818        20
+          FR    0.88889   0.76190   0.82051        21
+          UR    0.86364   0.95000   0.90476        20
+          TR    1.00000   0.85714   0.92308        21
+
+    accuracy                        0.86585        82
+   macro avg    0.87563   0.86726   0.86663        82
+weighted avg    0.87731   0.86585   0.86676        82
+
+================================
+              precision    recall  f1-score   support
+
+          NR      0.974     0.826     0.894        46
+          FR      0.854     0.891     0.872        46
+          UR      0.894     0.933     0.913        45
+          TR      0.900     0.957     0.928        47
+
+    accuracy                          0.902       184
+   macro avg      0.906     0.902     0.902       184
+weighted avg      0.906     0.902     0.902       184
+
+
+Process finished with exit code 0

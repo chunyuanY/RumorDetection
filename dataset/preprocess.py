@@ -5,11 +5,15 @@ import gensim
 import numpy as np
 import scipy.sparse as sp
 import pickle
+import os
+from torch_geometric.data import Data
 import jieba
+import torch
 jieba.set_dictionary('dict.txt.big')
 
 
 w2v_dim = 300
+max_len = 50
 
 dic = {
     'non-rumor': 0,   # Non-rumor   NR
@@ -18,7 +22,7 @@ dic = {
     'true': 3,    # debunk rumor  TR
 }
 
-def clean_str_cut(string, task):
+def clean_str_cut(string, task='twitter'):
     """
     Tokenization/string cleaning for all datasets except for SST.
     Original taken from https://github.com/yoonkim/CNN_sentence/blob/master/process_data.py
@@ -43,109 +47,70 @@ def clean_str_cut(string, task):
     return words
 
 
-def build_symmetric_adjacency_matrix(edges, shape):
-    def normalize_adj(mx):
-        """Row-normalize sparse matrix"""
-        rowsum = np.array(mx.sum(1))
-        r_inv_sqrt = np.power(rowsum, -0.5).flatten()
-        r_inv_sqrt[np.isinf(r_inv_sqrt)] = 0.
-        r_mat_inv_sqrt = sp.diags(r_inv_sqrt)
-        return mx.dot(r_mat_inv_sqrt).transpose().dot(r_mat_inv_sqrt)
-
-    adj = sp.coo_matrix((edges[:, 2], (edges[:, 0], edges[:, 1])), shape=shape, dtype=np.float32)
-    # build symmetric adjacency matrix
-    adj = adj + adj.T.multiply(adj.T > adj) - adj.multiply(adj.T > adj)
-    adj = normalize_adj(adj + sp.eye(adj.shape[0]))
-    return adj.tocoo()
+def read_replies(filepath, tweet_id, task, max_replies=30):
+    filepath1 = filepath + "replies/" + tweet_id + ".txt"
+    replies = []
+    if os.path.exists(filepath1):
+        with open(filepath1, 'r', encoding='utf-8') as fin:
+            for line in fin:
+                replies.append(clean_str_cut(line, task)[:max_len])
+    return replies[:max_replies]
 
 
-def read_corpus(root_path, file_name):
-    X_tids = []
-    X_uids = []
-
-    with open(root_path + file_name +".train", 'r', encoding='utf-8') as input:
-        X_train_tid, X_train_content, y_train = [], [], []
-        for line in input.readlines():
+def read_train_dev_test(root_path, file_name, appendix, X_all_tids):
+    filepath = root_path + file_name + appendix
+    with open(filepath, 'r', encoding='utf-8') as fin:
+        X_tid, X_content, X_replies, y_ = [], [], [], []
+        for line in fin.readlines():
             tid, content, label = line.strip().split("\t")
-            X_tids.append(tid)
-            X_train_tid.append(tid)
-            X_train_content.append(clean_str_cut(content, file_name))
-            y_train.append(dic[label])
+            X_all_tids.append(tid)
+            X_tid.append(tid)
+            replies = read_replies(root_path, tid, file_name)
+            X_replies.append(replies)
+            X_content.append(clean_str_cut(content, file_name)[:max_len])
+            y_.append(dic[label])
+    return X_tid, X_content, X_replies, y_
 
-    with open(root_path + file_name +".dev", 'r', encoding='utf-8') as input:
-        X_dev_tid, X_dev_content, y_dev = [], [], []
-        for line in input.readlines():
-            tid, content, label = line.strip().split("\t")
-            X_tids.append(tid)
-            X_dev_tid.append(tid)
-            X_dev_content.append(clean_str_cut(content, file_name))
-            y_dev.append(dic[label])
 
-    with open(root_path + file_name +".test", 'r', encoding='utf-8') as input:
-        X_test_tid, X_test_content, y_test = [], [], []
-        for line in input.readlines():
-            tid, content, label = line.strip().split("\t")
-            X_tids.append(tid)
-            X_test_tid.append(tid)
-            X_test_content.append(clean_str_cut(content, file_name))
-            y_test.append(dic[label])
+def read_dataset(root_path, file_name):
+    X_all_tids = []
+    X_all_uids = []
+
+    X_train_tid, X_train_content, X_train_replies, y_train = read_train_dev_test(root_path, file_name, ".train", X_all_tids)
+    X_dev_tid, X_dev_content, X_dev_replies, y_dev = read_train_dev_test(root_path, file_name, ".dev", X_all_tids)
+    X_test_tid, X_test_content, X_test_replies, y_test = read_train_dev_test(root_path, file_name, ".test", X_all_tids)
 
     with open(root_path + file_name +"_graph.txt", 'r', encoding='utf-8') as input:
-        relation = []
+        edge_index, edges_weight = [], []
         for line in input.readlines():
             tmp = line.strip().split()
             src = tmp[0]
-            X_uids.append(src)
 
             for dst_ids_ws in tmp[1:]:
                 dst, w = dst_ids_ws.split(":")
-                X_uids.append(dst)
-                relation.append([src, dst, w])
+                X_all_uids.append(dst)
+                # edge_index.append([src, dst])
+                edge_index.append([dst, src])
+                # edges_weight.append(float(w))
+                edges_weight.append(float(w))
 
-    X_id = list(set(X_tids + X_uids))
+    X_id = list(set(X_all_tids + X_all_uids))
     num_node = len(X_id)
     print(num_node)
-    X_id_dic = {id:i for i, id in enumerate(X_id)}
+    X_id_dic = {id:i+1 for i, id in enumerate(X_id)}
 
-    relation = np.array([[X_id_dic[tup[0]], X_id_dic[tup[1]], tup[2]] for tup in relation])
-    relation = build_symmetric_adjacency_matrix(relation, shape=(num_node, num_node))
+    edges_list = [[X_id_dic[tup[0]], X_id_dic[tup[1]]] for tup in edge_index]
+    edges_list = torch.LongTensor(edges_list).t()
+    edges_weight = torch.FloatTensor(edges_weight)
+    data = Data(edge_index=edges_list, edge_weight=edges_weight)
 
     X_train_tid = np.array([X_id_dic[tid] for tid in X_train_tid])
     X_dev_tid = np.array([X_id_dic[tid] for tid in X_dev_tid])
     X_test_tid = np.array([X_id_dic[tid] for tid in X_test_tid])
 
-    return X_train_tid, X_train_content, y_train, \
-           X_dev_tid, X_dev_content, y_dev, \
-           X_test_tid, X_test_content, y_test, \
-           relation
-
-
-# def train_dev_test_split(root_path, file_name):
-#     num_node, relation, X_tid, X_content, y = read_corpus(root_path, file_name)
-#     relation = build_symmetric_adjacency_matrix(relation, shape=(num_node, num_node))
-#
-#     X_content_idx = np.arange(len(X_content))
-#     X_idx, X_dev_idx, y, y_dev = train_test_split(X_content_idx, y, test_size=0.1, random_state=0, stratify=y)  #
-#
-#     X_dev_tid = X_tid[X_dev_idx].tolist()
-#     X_dev = X_content[X_dev_idx].tolist()
-#
-#     X_tid = X_tid[X_idx]
-#     X_content = X_content[X_idx]
-#
-#     X_content_idx = np.arange(len(X_content))
-#     X_train_idx, X_test_idx, y_train, y_test = train_test_split(X_content_idx, y, test_size=0.25, random_state=0, stratify=y) #
-#
-#     X_train_tid = X_tid[X_train_idx].tolist()
-#     X_test_tid = X_tid[X_test_idx].tolist()
-#
-#     X_train = X_content[X_train_idx].tolist()
-#     X_test = X_content[X_test_idx].tolist()
-#
-#     return X_train_tid, X_train, y_train.tolist(), \
-#            X_dev_tid, X_dev, y_dev.tolist(), \
-#            X_test_tid, X_test, y_test.tolist(), \
-#            relation
+    return X_train_tid, X_train_content, X_train_replies, y_train, \
+           X_dev_tid, X_dev_content, X_dev_replies, y_dev, \
+           X_test_tid, X_test_content, X_test_replies, y_test, data
 
 
 def vocab_to_word2vec(fname, vocab):
@@ -174,28 +139,17 @@ def build_vocab_word2vec(sentences, w2v_path='numberbatch-en.txt'):
     Returns vocabulary mapping and inverse vocabulary mapping.
     """
     # Build vocabulary
-    vocabulary_inv = []
     word_counts = Counter(itertools.chain(*sentences))
     # Mapping from index to word
-    vocabulary_inv += [x[0] for x in word_counts.most_common() if x[1] >= 2]
+    vocabulary_inv = [x[0] for x in word_counts.most_common() if x[1] >= 2]
+    vocabulary_inv = vocabulary_inv[1:]  # don't need <PAD>
     # Mapping from word to index
-    vocabulary = {x: i for i, x in enumerate(vocabulary_inv)}
+    word_to_ix = {x: i+1 for i, x in enumerate(vocabulary_inv)}
 
     print("embedding_weights generation.......")
-    word2vec = vocab_to_word2vec(w2v_path, vocabulary)     #
+    word2vec = vocab_to_word2vec(w2v_path, word_to_ix)     #
     embedding_weights = build_word_embedding_weights(word2vec, vocabulary_inv)
-    return vocabulary, embedding_weights
-
-
-def pad_sequence(X, max_len=50):
-    X_pad = []
-    for doc in X:
-        if len(doc) >= max_len:
-            doc = doc[:max_len]
-        else:
-            doc = [0] * (max_len - len(doc)) + doc
-        X_pad.append(doc)
-    return X_pad
+    return word_to_ix, embedding_weights
 
 
 def build_word_embedding_weights(word_vecs, vocabulary_inv):
@@ -214,38 +168,45 @@ def build_word_embedding_weights(word_vecs, vocabulary_inv):
     return embedding_weights
 
 
-def build_input_data(X, vocabulary):
+def build_input_data(X, word_to_ix, is_replies=False, max_replies=30):
     """
     Maps sentencs and labels to vectors based on a vocabulary.
     """
-    x = [[vocabulary[word] for word in sentence if word in vocabulary] for sentence in X]
-    x = pad_sequence(x)
-    return x
+    if not is_replies:
+        X = [[0]*(max_len - len(sentence)) + [word_to_ix[word] if word in word_to_ix else 0 for word in sentence] for sentence in X]
+    else:
+        X = [ [[0]*max_len]* (max_replies - len(replies))  + [ [0]*(max_len - len(doc)) + [word_to_ix[word] if word in word_to_ix else 0 for word in doc] for doc in replies] for replies in X]
+    return X
 
 
 def w2v_feature_extract(root_path, filename, w2v_path):
-    X_train_tid, X_train, y_train, \
-    X_dev_tid, X_dev, y_dev, \
-    X_test_tid, X_test, y_test, relation = read_corpus(root_path, filename)
+    X_train_tid, X_train_content, X_train_replies, y_train, \
+    X_dev_tid, X_dev_content, X_dev_replies, y_dev, \
+    X_test_tid, X_test_content, X_test_replies, y_test, Adj = read_dataset(root_path, filename)
 
     print("text word2vec generation.......")
-    vocabulary, word_embeddings = build_vocab_word2vec(X_train + X_dev + X_test, w2v_path=w2v_path)
+    text_data = X_train_content + X_dev_content + X_test_content + list(itertools.chain(*X_train_replies)) + list(itertools.chain(*X_dev_replies)) + list(itertools.chain(*X_test_replies))
+    vocabulary, word_embeddings = build_vocab_word2vec(text_data, w2v_path=w2v_path)
     pickle.dump(vocabulary, open(root_path + "/vocab.pkl", 'wb'))
     print("Vocabulary size: "+str(len(vocabulary)))
 
     print("build input data.......")
-    X_train = build_input_data(X_train, vocabulary)
-    X_dev = build_input_data(X_dev, vocabulary)
-    X_test = build_input_data(X_test, vocabulary)
+    X_train_content = build_input_data(X_train_content, vocabulary)
+    X_dev_content = build_input_data(X_dev_content, vocabulary)
+    X_test_content = build_input_data(X_test_content, vocabulary)
 
-    pickle.dump([X_train_tid, X_train, y_train, word_embeddings, relation], open(root_path+"/train.pkl", 'wb') )
-    pickle.dump([X_dev_tid, X_dev, y_dev], open(root_path+"/dev.pkl", 'wb') )
-    pickle.dump([X_test_tid, X_test, y_test], open(root_path+"/test.pkl", 'wb') )
+    X_train_replies = build_input_data(X_train_replies, vocabulary, True)
+    X_dev_replies = build_input_data(X_dev_replies, vocabulary, True)
+    X_test_replies = build_input_data(X_test_replies, vocabulary, True)
+
+    pickle.dump([X_train_tid, X_train_content, X_train_replies, y_train, word_embeddings, Adj], open(root_path+"/train.pkl", 'wb') )
+    pickle.dump([X_dev_tid, X_dev_content, X_dev_replies, y_dev], open(root_path+"/dev.pkl", 'wb') )
+    pickle.dump([X_test_tid, X_test_content, X_test_replies, y_test], open(root_path+"/test.pkl", 'wb') )
 
 
 if __name__ == "__main__":
-    w2v_feature_extract('./twitter15/', "twitter15", "twitter_w2v.bin")
-    w2v_feature_extract('./twitter16/', "twitter16", "twitter_w2v.bin")
+    # w2v_feature_extract('./twitter15/', "twitter15", "twitter_w2v.bin")
+    # w2v_feature_extract('./twitter16/', "twitter16", "twitter_w2v.bin")
     w2v_feature_extract('./weibo/', "weibo", "weibo_w2v.bin")
 
 

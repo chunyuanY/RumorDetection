@@ -1,135 +1,186 @@
+from typing import Union, Tuple, Optional
+from torch_geometric.typing import (OptPairTensor, Adj, Size, NoneType,
+                                    OptTensor)
+
 import torch
-import torch.nn as nn
+from torch import Tensor
 import torch.nn.functional as F
+from torch.nn import Parameter, Linear
+from torch_sparse import SparseTensor, set_diag
+from torch_geometric.nn.conv import MessagePassing
+from torch_geometric.utils import remove_self_loops, add_self_loops, softmax
 import torch.nn.init as init
 
 
-class SpecialSpmmFunction(torch.autograd.Function):
+class GATConv(MessagePassing):
+    r"""The graph attentional operator from the `"Graph Attention Networks"
+    <https://arxiv.org/abs/1710.10903>`_ paper
+
+    .. math::
+        \mathbf{x}^{\prime}_i = \alpha_{i,i}\mathbf{\Theta}\mathbf{x}_{i} +
+        \sum_{j \in \mathcal{N}(i)} \alpha_{i,j}\mathbf{\Theta}\mathbf{x}_{j},
+
+    where the attention coefficients :math:`\alpha_{i,j}` are computed as
+
+    .. math::
+        \alpha_{i,j} =
+        \frac{
+        \exp\left(\mathrm{LeakyReLU}\left(\mathbf{a}^{\top}
+        [\mathbf{\Theta}\mathbf{x}_i \, \Vert \, \mathbf{\Theta}\mathbf{x}_j]
+        \right)\right)}
+        {\sum_{k \in \mathcal{N}(i) \cup \{ i \}}
+        \exp\left(\mathrm{LeakyReLU}\left(\mathbf{a}^{\top}
+        [\mathbf{\Theta}\mathbf{x}_i \, \Vert \, \mathbf{\Theta}\mathbf{x}_k]
+        \right)\right)}.
+
+    Args:
+        in_channels (int or tuple): Size of each input sample. A tuple
+            corresponds to the sizes of source and target dimensionalities.
+        out_channels (int): Size of each output sample.
+        heads (int, optional): Number of multi-head-attentions.
+            (default: :obj:`1`)
+        concat (bool, optional): If set to :obj:`False`, the multi-head
+            attentions are averaged instead of concatenated.
+            (default: :obj:`True`)
+        negative_slope (float, optional): LeakyReLU angle of the negative
+            slope. (default: :obj:`0.2`)
+        dropout (float, optional): Dropout probability of the normalized
+            attention coefficients which exposes each node to a stochastically
+            sampled neighborhood during training. (default: :obj:`0`)
+        add_self_loops (bool, optional): If set to :obj:`False`, will not add
+            self-loops to the input graph. (default: :obj:`True`)
+        bias (bool, optional): If set to :obj:`False`, the layer will not learn
+            an additive bias. (default: :obj:`True`)
+        **kwargs (optional): Additional arguments of
+            :class:`torch_geometric.nn.conv.MessagePassing`.
     """
-    Special function for only sparse region backpropataion layer.
-    """
-    @staticmethod
-    def forward(ctx, indices, values, shape, b):
-        assert indices.requires_grad == False
-        a = torch.sparse_coo_tensor(indices, values, shape)
-        ctx.save_for_backward(a, b)
-        ctx.N = shape[0]
-        return torch.matmul(a, b)
+    _alpha: OptTensor
 
-    @staticmethod
-    def backward(ctx, grad_output):
-        a, b = ctx.saved_tensors
-        grad_values = grad_b = None
-        if ctx.needs_input_grad[1]:
-            grad_a_dense = grad_output.matmul(b.t())
-            edge_idx = a._indices()[0, :] * ctx.N + a._indices()[1, :]
-            grad_values = grad_a_dense.view(-1)[edge_idx]
+    def __init__(self, in_channels: Union[int, Tuple[int, int]],
+                 out_channels: int, heads: int = 1, concat: bool = True,
+                 negative_slope: float = 0.2, dropout: float = 0.,
+                 add_self_loops: bool = True, bias: bool = True, **kwargs):
+        super(GATConv, self).__init__(aggr='add', node_dim=0, **kwargs)
 
-        if ctx.needs_input_grad[3]:
-            grad_b = a.t().matmul(grad_output)
-        return None, grad_values, None, grad_b
-
-
-class SpecialSpmm(nn.Module):
-    def forward(self, indices, values, shape, b):
-        return SpecialSpmmFunction.apply(indices, values, shape, b)
-
-
-class SpGraphAttentionLayer(nn.Module):
-    """
-    Sparse version GAT layer, similar to https://arxiv.org/abs/1710.10903
-    """
-
-    def __init__(self, in_features, out_features, dropout, alpha, concat=True):
-        super(SpGraphAttentionLayer, self).__init__()
-        self.in_features = in_features
-        self.out_features = out_features
-        self.alpha = alpha
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.heads = heads
         self.concat = concat
+        self.negative_slope = negative_slope
+        self.dropout = dropout
+        self.add_self_loops = add_self_loops
 
-        self.W = nn.Parameter(torch.zeros(size=(in_features, out_features)))
-        nn.init.xavier_normal_(self.W.data)
+        if isinstance(in_channels, int):
+            self.lin_l = Linear(in_channels, heads * out_channels, bias=False)
+            self.lin_r = self.lin_l
+        else:
+            self.lin_l = Linear(in_channels[0], heads * out_channels, False)
+            self.lin_r = Linear(in_channels[1], heads * out_channels, False)
 
-        self.a = nn.Parameter(torch.zeros(size=(1, 2*out_features)))
-        nn.init.xavier_normal_(self.a.data)
+        self.att_l = Parameter(torch.Tensor(1, heads, out_channels))
+        self.att_r = Parameter(torch.Tensor(1, heads, out_channels))
 
-        self.dropout = nn.Dropout(dropout)
-        self.leakyrelu = nn.LeakyReLU(self.alpha)
-        self.special_spmm = SpecialSpmm()
+        if bias and concat:
+            self.bias = Parameter(torch.Tensor(heads * out_channels))
+        elif bias and not concat:
+            self.bias = Parameter(torch.Tensor(out_channels))
+        else:
+            self.register_parameter('bias', None)
+
+        self._alpha = None
+
+        self.reset_parameters()
+
+    def reset_parameters(self):
+        init.xavier_uniform_(self.lin_l.weight)
+        init.xavier_uniform_(self.lin_r.weight)
+        init.xavier_uniform_(self.att_l)
+        init.xavier_uniform_(self.att_r)
+        init.zeros_(self.bias)
 
 
-    def forward(self, input, adj):
-        N = input.size()[0]
-        edge = torch.LongTensor(adj.nonzero())
+    def forward(self, x: Union[Tensor, OptPairTensor], edge_index: Adj, edge_weight,
+                size: Size = None, return_attention_weights=None):
+        # type: (Union[Tensor, OptPairTensor], Tensor, Size, NoneType) -> Tensor  # noqa
+        # type: (Union[Tensor, OptPairTensor], SparseTensor, Size, NoneType) -> Tensor  # noqa
+        # type: (Union[Tensor, OptPairTensor], Tensor, Size, bool) -> Tuple[Tensor, Tuple[Tensor, Tensor]]  # noqa
+        # type: (Union[Tensor, OptPairTensor], SparseTensor, Size, bool) -> Tuple[Tensor, SparseTensor]  # noqa
+        r"""
 
-        h = torch.mm(input, self.W)
-        # h: N x out
-        assert not torch.isnan(h).any()
+        Args:
+            return_attention_weights (bool, optional): If set to :obj:`True`,
+                will additionally return the tuple
+                :obj:`(edge_index, attention_weights)`, holding the computed
+                attention weights for each edge. (default: :obj:`None`)
+        """
+        H, C = self.heads, self.out_channels
 
-        # Self-attention on the nodes - Shared attention mechanism
-        edge_h = torch.cat((h[edge[0, :], :], h[edge[1, :], :]), dim=1).t()
-        # edge: 2*D x E
+        x_l: OptTensor = None
+        x_r: OptTensor = None
+        alpha_l: OptTensor = None
+        alpha_r: OptTensor = None
+        if isinstance(x, Tensor):
+            assert x.dim() == 2, 'Static graphs not supported in `GATConv`.'
+            x_l = x_r = self.lin_l(x).view(-1, H, C)
+            alpha_l = alpha_r = (x_l * self.att_l).sum(dim=-1)
+        else:
+            x_l, x_r = x[0], x[1]
+            assert x[0].dim() == 2, 'Static graphs not supported in `GATConv`.'
+            x_l = self.lin_l(x_l).view(-1, H, C)
+            alpha_l = (x_l * self.att_l).sum(dim=-1)
+            if x_r is not None:
+                x_r = self.lin_r(x_r).view(-1, H, C)
+                alpha_r = (x_r * self.att_r).sum(dim=-1)
 
-        edge_e = torch.exp(-self.leakyrelu(self.a.mm(edge_h).squeeze()))
-        assert not torch.isnan(edge_e).any()
-        # edge_e: E
+        assert x_l is not None
+        assert alpha_l is not None
 
-        e_rowsum = self.special_spmm(edge, edge_e, torch.Size([N, N]), torch.ones(size=(N, 1)).cuda())
-        # e_rowsum: N x 1
+        if self.add_self_loops:
+            if isinstance(edge_index, Tensor):
+                num_nodes = x_l.size(0)
+                num_nodes = size[1] if size is not None else num_nodes
+                num_nodes = x_r.size(0) if x_r is not None else num_nodes
+                edge_index, _ = remove_self_loops(edge_index)
+                edge_index, edge_weight = add_self_loops(edge_index, edge_weight=edge_weight, num_nodes=num_nodes)
+            elif isinstance(edge_index, SparseTensor):
+                edge_index = set_diag(edge_index)
 
-        edge_e = self.dropout(edge_e)
-        # edge_e: E
+        # propagate_type: (x: OptPairTensor, alpha: OptPairTensor)
+        out = self.propagate(edge_index, x=(x_l, x_r), edge_weight=edge_weight,
+                             alpha=(alpha_l, alpha_r), size=size)
 
-        h_prime = self.special_spmm(edge, edge_e, torch.Size([N, N]), h)
-        assert not torch.isnan(h_prime).any()
-        # h_prime: N x out
-
-        h_prime = h_prime.div(e_rowsum)
-        # h_prime: N x out
-        assert not torch.isnan(h_prime).any()
+        alpha = self._alpha
+        self._alpha = None
 
         if self.concat:
-            # if this layer is not last layer,
-            return F.elu(h_prime)
+            out = out.view(-1, self.heads * self.out_channels)
         else:
-            # if this layer is last layer,
-            return h_prime
+            out = out.mean(dim=1)
+
+        if self.bias is not None:
+            out += self.bias
+
+        if isinstance(return_attention_weights, bool):
+            assert alpha is not None
+            if isinstance(edge_index, Tensor):
+                return out, (edge_index, alpha)
+            elif isinstance(edge_index, SparseTensor):
+                return out, edge_index.set_value(alpha, layout='coo')
+        else:
+            return out
+
+    def message(self, x_j: Tensor, edge_weight:Tensor, alpha_j: Tensor, alpha_i: OptTensor,
+                index: Tensor, ptr: OptTensor,
+                size_i: Optional[int]) -> Tensor:
+        alpha = alpha_j if alpha_i is None else alpha_j + alpha_i
+        alpha *= edge_weight.unsqueeze(dim=-1)
+        alpha = F.leaky_relu(alpha, self.negative_slope)
+        alpha = softmax(alpha, index, ptr, size_i)
+        self._alpha = alpha
+        alpha = F.dropout(alpha, p=self.dropout, training=self.training)
+        return x_j * alpha.unsqueeze(-1)
 
     def __repr__(self):
-        return self.__class__.__name__ + ' (' + str(self.in_features) + ' -> ' + str(self.out_features) + ')'
-
-
-class GAT(nn.Module):
-
-    def __init__(self, nfeat, uV, adj, hidden=16, nb_heads=8, n_output=300, dropout=0.5, alpha=0.3):
-        """Sparse version of GAT."""
-        super(GAT, self).__init__()
-        self.dropout = nn.Dropout(dropout)
-        self.uV = uV
-        self.adj = adj
-        self.user_tweet_embedding = nn.Embedding(self.uV, 300, padding_idx=0)
-        init.xavier_uniform_(self.user_tweet_embedding.weight)
-
-        self.attentions = nn.ModuleList([SpGraphAttentionLayer(in_features = nfeat,
-                                                        out_features= hidden,
-                                                        dropout=dropout,
-                                                        alpha=alpha,
-                                                        concat=True) for _ in range(nb_heads)])
-        
-        self.out_att = SpGraphAttentionLayer(hidden * nb_heads,
-                                              n_output,
-                                             dropout=dropout,
-                                             alpha=alpha,
-                                             concat=False)
-
-    def forward(self, X_tid):
-        X = self.user_tweet_embedding(torch.arange(0, self.uV).long().cuda())
-        X = self.dropout(X)
-
-        X = torch.cat([att(X, self.adj) for att in self.attentions], dim=1)
-        X = self.dropout(X)
-
-        X = F.elu(self.out_att(X, self.adj))
-        X_ = X[X_tid]
-        return X_
-
+        return '{}({}, {}, heads={})'.format(self.__class__.__name__,
+                                             self.in_channels,
+                                             self.out_channels, self.heads)
